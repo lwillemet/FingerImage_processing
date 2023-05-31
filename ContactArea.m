@@ -47,6 +47,7 @@ imgMaskContact = createMask(e,h);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Time vector
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+filenameImg = 'Data/imgTest_14-20-03.tif';
 infoImg = imfinfo(filenameImg);
 
 fsImg = 1000; %%one thousand frames per second
@@ -57,7 +58,7 @@ tImg = -t1:1/fsImg:(length(infoImg)-nb_img_before_trigger-1)/fsImg;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Load and process force data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+filenameData = 'Data/dataTest_14-20-03.mat';
 load(filenameData)
 
 [idxTrig] = find(trigger>mean(trigger),1,'first');
@@ -136,3 +137,8 @@ for kk = numFrameTrack:lastFrame
     
 end
 
+%% Plotting
+figure;
+plot(tImg, metricArea);
+xlabel('time (s)')
+ylabel('Real contact area (mm^2)')
