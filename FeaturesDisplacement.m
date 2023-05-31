@@ -6,23 +6,21 @@ imgPiece = im2double(imread([folder img_folder '/piece.jpg']));
 scale = scaleComputation(imgPiece); % in mm/px
 
 %%estimate the transformation and realign figures
-imgTriangle1 = im2double(imread([folder img_folder '/triangle1.jpg']));
-[Xtrans1,Ytrans1,Angle1] = registration(imgTriangle1);
-imgTriangle2 = im2double(imread([folder img_folder '/triangle2.jpg']));
-[Xtrans2,Ytrans2,Angle2] = registration(imgTriangle2);
+imgTriangle = im2double(imread([folder img_folder '/triangle1.jpg']));
+[Xtrans,Ytrans,Angle] = registration(imgTriangle);
 
 middleLine = size(imgTriangle1,2)/2;
-imgRidges = imgTriangle1(:,1:middleLine);
-imgContact = imgTriangle1(:,middleLine+1:end);
-imgContactRot = imrotate (imgContact, Angle1 , 'crop');
-imgContactReg = imtranslate(imgContactRot,[Xtrans1 ,Ytrans1]);
+imgRidges = imgTriangle(:,1:middleLine);
+imgContact = imgTriangle(:,middleLine+1:end);
+imgContactRot = imrotate (imgContact, Angle , 'crop');
+imgContactReg = imtranslate(imgContactRot,[Xtrans ,Ytrans]);
 
 %%load background and correct contrast and light deviation
 imgBackground = im2double(imread([folder img_folder '/vide.jpg']));
 imgRidgesBack  = imgBackground(:,1:middleLine);
 imgContactBack  = imgBackground(:,middleLine+1:end);
-imgContactRot = imrotate (imgContactBack, Angle1 , 'crop');
-imgContactBackReg = imtranslate(imgContactRot,[Xtrans1 ,Ytrans1]);
+imgContactRot = imrotate (imgContactBack, Angle , 'crop');
+imgContactBackReg = imtranslate(imgContactRot,[Xtrans ,Ytrans]);
 histogram(imgContactBackReg(50:450,150:600),0:0.003:0.5)
 
 
@@ -88,13 +86,8 @@ for kk = numFrameTrack:lastFrame
     middleLine = size(img,2)/2;
     imgRidges  = img(:,1:middleLine);
     imgContact = img(:,middleLine+1:end);
-    if filenameImg (end-4) == '1'
-        imgContactRot = imrotate (imgContact, Angle1 , 'crop');
-        imgContactReg = imtranslate(imgContactRot,[Xtrans1 ,Ytrans1]);
-    elseif filenameImg (end-4) == '2'
-        imgContactRot = imrotate (imgContact, Angle2 , 'crop');
-        imgContactReg = imtranslate(imgContactRot,[Xtrans2 ,Ytrans2]);
-    end
+    imgContactRot = imrotate (imgContact, Angle , 'crop');
+    imgContactReg = imtranslate(imgContactRot,[Xtrans ,Ytrans]);
     
     %%background removal
     imgRidgesCorr = imgRidges - imgRidgesBack;
