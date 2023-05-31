@@ -17,7 +17,7 @@ imgContactRot = imrotate (imgContact, Angle , 'crop');
 imgContactReg = imtranslate(imgContactRot,[Xtrans ,Ytrans]);
 
 %%load background and correct contrast and light deviation
-imgBackground = im2double(imread([folder '/vide.jpg']));
+imgBackground = im2double(imread([folder '/empty.jpg']));
 imgRidgesBack  = imgBackground(:,1:middleLine);
 imgContactBack  = imgBackground(:,middleLine+1:end);
 imgContactRot = imrotate (imgContactBack, Angle , 'crop');
