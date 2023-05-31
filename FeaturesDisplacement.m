@@ -10,7 +10,7 @@ scale = scaleComputation(imgPiece); % in mm/px
 imgTriangle = im2double(imread([folder '/triangle1.jpg']));
 [Xtrans,Ytrans,Angle] = registration(imgTriangle);
 
-middleLine = size(imgTriangle1,2)/2;
+middleLine = size(imgTriangle,2)/2;
 imgRidges = imgTriangle(:,1:middleLine);
 imgContact = imgTriangle(:,middleLine+1:end);
 imgContactRot = imrotate (imgContact, Angle , 'crop');
@@ -47,6 +47,7 @@ imgMaskContact = createMask(e,h);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Time vector
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+filenameImg = 'Data/imgTest_14-20-03.tif';
 infoImg = imfinfo(filenameImg);
 
 fsImg = 1000; %%one thousand frames per second
@@ -57,7 +58,7 @@ tImg = -t1:1/fsImg:(length(infoImg)-nb_img_before_trigger-1)/fsImg;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Load and process force data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+filenameData = 'Data/dataTest_14-20-03.mat';
 load(filenameData)
 
 [idxTrig] = find(trigger>mean(trigger),1,'first');
@@ -224,6 +225,16 @@ for kk=numFrameTrack:lastFrame
 dispTotal(kk,1) = sqrt(nanmedian(dispPoints(:,1,kk)).^2 + nanmedian(dispPoints(:,1,kk)).^2).*scale;
 end
 dispTotal(1:numFrameTrack-1) = NaN(1,numFrameTrack-1);
+
+%% Plotting
+figure;
+for kk=numFrameTrack:lastFrame
+imshow(imgSharp(:,:,kk))
+hold on
+quiver(pointsAll(1:end,1,kk),pointsAll(1:end,2,kk),20*dispPoints(1:end,1,kk),20*dispPoints(1:end,2,kk),'w')
+hold off
+pause(1e-3)
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Divergence and curl of the deformation field
