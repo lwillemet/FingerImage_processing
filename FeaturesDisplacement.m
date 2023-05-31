@@ -1,12 +1,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Load mire and blank image
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+folder = pwd;
 %%compute scale with one coin
-imgPiece = im2double(imread([folder img_folder '/piece.jpg']));
+imgPiece = im2double(imread([folder '/piece.jpg']));
 scale = scaleComputation(imgPiece); % in mm/px
 
 %%estimate the transformation and realign figures
-imgTriangle = im2double(imread([folder img_folder '/triangle1.jpg']));
+imgTriangle = im2double(imread([folder '/triangle1.jpg']));
 [Xtrans,Ytrans,Angle] = registration(imgTriangle);
 
 middleLine = size(imgTriangle1,2)/2;
@@ -16,7 +17,7 @@ imgContactRot = imrotate (imgContact, Angle , 'crop');
 imgContactReg = imtranslate(imgContactRot,[Xtrans ,Ytrans]);
 
 %%load background and correct contrast and light deviation
-imgBackground = im2double(imread([folder img_folder '/vide.jpg']));
+imgBackground = im2double(imread([folder '/vide.jpg']));
 imgRidgesBack  = imgBackground(:,1:middleLine);
 imgContactBack  = imgBackground(:,middleLine+1:end);
 imgContactRot = imrotate (imgContactBack, Angle , 'crop');
